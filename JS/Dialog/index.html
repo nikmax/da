@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Doḱument - Dialog mit Javassvript</title>
+
+	<style type="text/css">
+		body {
+			margin: 0;
+			padding: 50px;
+		}
+		.dialog-bg {
+			background-color: rgba(0,0,0,0.5);
+			z-index: 999;
+			position: fixed;
+			left: 0;
+			right: 0;
+			top: 0;
+			bottom: 0;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+		}
+		.dialog {
+			height: 20vh;
+			width: 40vw;
+			background-color: white;
+			border: 1px solid lightgrey;
+			border-radius: 10px;
+			padding: 24px;
+		}
+		.dialog-none {
+			display: none;
+		}
+	</style>
+
+	<script type="text/javascript">
+		function openDialog(text){
+			document.getElementById('dialog-window').classList.remove('dialog-none');
+			document.getElementById('dialog-message').innerHTML = text;
+		}
+		function closeDialog(){
+			document.getElementById('dialog-window').classList.add('dialog-none');
+		}
+	</script>
+</head>
+
+<body>
+	<div id="dialog-window" class="dialog-bg dialog-none" onclick="closeDialog()">
+		<div class="dialog">
+			<h1>Dialog</h1>
+			<p id="dialog-message">Dialogtext</p>
+		</div>
+	</div>
+	<h1>Überschrift Dialog mit Javascript</h1>
+	<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+	tempor <a href ="#" onclick="openDialog('Hier ist ein Test')">incididunt</a> ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+	quis nostrud exercitation ullamco <a href="#" onclick="openDialog('Hier ist ein anderer Test')">laboris</a> nisi ut aliquip ex ea commodo
+	consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+	cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+	proident, sunt in culpa qui officia deserunt <a href="#" onclick="openDialog('Der dritte Hinweis')">mollit</a> anim id est laborum.
+	</p>
+</body>
+</html>

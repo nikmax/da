@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Dokument - Mein erster FB</title>
+
+	<style type="text/css">
+		.post-item {
+			width: 500px;
+			border: 1px solid lightgrey;
+			margin-top: 10px;
+			padding: 30px;
+		}
+	</style>
+
+	<script type="text/javascript">
+		
+		let posts = [];
+		let names = [];
+		function insertPost(){
+			let myposts = document.getElementById('postlist');
+			let name = document.getElementById('name');
+			let message = document.getElementById('message');
+			posts.push(message.value);
+			names.push(name.value);
+			myposts.innerHTML = "";
+			for(let i=0;i<posts.length;i++){
+				myposts.innerHTML += `<div class="post-item"><b>${names[i]}</b><br>${posts[i]}</div>`; 
+			}
+			message.value = "";
+			name.value = "";
+		}
+	</script>
+</head>
+
+<body>
+	<textarea placeholder="Ein neuer post" name="newpost" id="message"></textarea><br>
+	<input type="text" placeholder="Dein Name" id="name">
+	
+	<button onclick="insertPost()">posten</button>
+	<div id="postlist">
+	</div>
+		<!--div class="post-item">
+			<b>Name</b>
+			Lorem ipsum dolor sit amet, consectetur adipisicing elit
+		</div-->
+
+</body>
+</html>
