@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Notes Like Google Keep with JS</title>
+
+	<style type="text/css">
+		body {
+			margin: 0;
+		}
+		#inputdiv{
+			display: flex;
+    		flex-direction: column;
+    		margin: 20px;
+	    	padding: 50px;
+		}
+		#notes {
+			display: flex;
+	    	flex-wrap: wrap;
+    		background-color: lightblue;
+		}
+		.notes {
+			border: 1px solid;
+    		margin: 10px;
+	    	padding: 20px;
+	    	border-radius: 10px;
+		}
+		.hidden {
+			display: none;
+		}
+	</style>
+
+	<script type="text/javascript">
+		let notes = [];
+		if(localStorage.getItem('notes')){
+			notes = JSON.parse(localStorage.getItem('notes'));
+		}
+		function saveNote(){
+			let title = document.getElementById('notetitle');
+			let body = document.getElementById('notebody');
+			let button = document.getElementById('notebutton');
+			if (title.value != "" || body.value !== "" ){
+				if(notes)
+				notes.unshift([title.value,body.value]);
+				localStorage.setItem('notes',JSON.stringify(notes));
+				title.value = "";
+				body.value = "";
+				showNotes();
+			}
+		}
+		function editNote(node){
+			console.log("editiere Notiz"+node);
+		}
+		function deleteNote(node){
+			console.log("lösche Notiz" + node);
+		}
+		function showNotes(){
+			let notesdiv = document.getElementById('notes');
+			notesdiv.innerHTML = "";
+			if (notes.length != 0){
+				for (let i = 0; i < notes.length; i++){
+					notesdiv.innerHTML += `
+						<div class="notes" onclick="editNote(${i})">
+							<svg class="hidden" onclick="deleteNote(${i})" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M15 4V3H9v1H4v2h1v13c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V6h1V4h-5zm2 15H7V6h10v13z"></path><path d="M9 8h2v9H9zm4 0h2v9h-2z"></path></svg>
+							<div class="notetitle">${notes[i][0]}</div>
+							<div class="notebody">${notes[i][1]}</div>
+						</div>
+					`;
+				}
+			} else {
+				notesdiv.innerHTML = "Keine Notizen";
+			}
+		}
+	</script>
+</head>
+
+<body onload="showNotes()">
+	<h1>Notizen</h1>
+	<div id="inputdiv">
+		<input type="text" id="notetitle" placeholder="Titel">
+		<textarea id="notebody" placeholder="Text"></textarea>
+		<button id="notebutton" onclick="saveNote()">speichern</button>
+	</div>
+	<div id="notes">
+		<div class="notes" id="note_1">
+			<div class="notetitle">Mein erstes Notiz</div>
+			<div class="notebody">Es geht darum , wie man das mit JavaScript programmiert.</div>
+		</div>
+	</div>
+</body>
+</html>
