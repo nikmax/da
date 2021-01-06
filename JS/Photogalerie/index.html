@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" type="text/css" href="css/style.css">
+	<script src="js/script.js" async></script>
+	<title>Dokument - Fotos mit JS</title>
+</head>
+
+<body onload="showGalerie()">
+	<!--div id="messages" class="hidden" onclick="hiddenDiv(this)"><div class="message">Linke Maustaste -> vorheriges Bild<br>Rechte Maustaste -> nächstes Bild<br>Mittlere Maustaste -> fenster schliessen</div></div-->
+	<div id="picture" class="hidden" onmousedown="nextPicture(event)"><img src=""></div>
+	<div id="galerie"></div>
+</body>
+</html>

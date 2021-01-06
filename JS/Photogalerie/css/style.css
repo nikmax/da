@@ -1,0 +1,50 @@
+body {
+	margin: 0px;
+}
+#messages {
+	background-color: rgba(0,0,0,0.5);
+	z-index: 999;
+	position: fixed;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+.message {
+	padding: 100px;
+    font-size: 30px;
+    border-radius: 20px;
+    background-color: white;
+}
+#picture {
+	background-color: black;
+	z-index: 998;
+	position: fixed;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+#picture img {
+	height: 100vh;
+	object-fit: contain;
+} 
+.hidden {
+	display: none !important;
+}
+#galerie {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-between;
+}
+.picture {
+	height: 150px;
+	object-fit: contain;
+	margin: 5px;
+}
