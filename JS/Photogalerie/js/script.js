@@ -3,12 +3,18 @@ let pictures = ["10.jpg","11.jpg","12.jpg","13.webp","14.jpg","15.jpg","16.jpg",
 let cur = 0;
 function showPicture(picture){
 	let node = document.getElementById('picture');
-	//node.classList.remove('hidden');
 	node.firstChild.setAttribute('src','pictures/'+pictures[picture]);
 }
+function startPicture(picture){
+	showPicture(picture);
+	document.getElementById('picture').classList.remove('hidden');
+	
+	document.getElementById('message').classList.remove('hidden');  // zeige Bedienung
+}
+
 function nextPicture(event){
 	let node = document.getElementById('picture');
-	console.log(event.button);
+	//console.log(event.button);
 	if(event.button == 0) {
 		if(++cur >= pictures.length) cur = 0;
 	}
@@ -23,6 +29,7 @@ function nextPicture(event){
 }
 function hiddenDiv(div){
 	div.classList.add('hidden');
+	return;
 }
 function showGalerie(){
 	let div = document.getElementById('galerie');
@@ -31,6 +38,6 @@ function showGalerie(){
 		img.setAttribute('src','pictures/'+pictures[i]);
 		div.appendChild(img);
 		img.classList.add('picture');
-		//img.addEventListener('click', function(){ showPicture(i); });
+		img.addEventListener('click', function(){startPicture(i);});
 	}
 }

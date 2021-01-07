@@ -1,7 +1,7 @@
 body {
 	margin: 0px;
 }
-#messages {
+#message {
 	background-color: rgba(0,0,0,0.5);
 	z-index: 999;
 	position: fixed;
