@@ -19,8 +19,10 @@
 			bottom: 0;
 			background-color: rgba(0,0,0,0.5);
 			display: flex;
+			flex-direction: column;
 			justify-content: center;
 			align-items: center;
+
 		}
 		#inputdiv{
 			display: flex;
@@ -34,15 +36,18 @@
 	    	padding: 50px;
 		}
 		.edit {
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
 			background-color: white;
-			padding: 20px;
-			margin: 50px;
 		}
 		.notes {
 			border: 1px solid;
     		margin: 10px;
 	    	padding: 20px;
 	    	border-radius: 10px;
+
 		}
 		.hidden {
 			display: none !important;
@@ -67,58 +72,68 @@
 
 	<script type="text/javascript">
 		let notes = [];
-		let waste = [];
-		let mode = 'notes';
+		let mode = 1; // 1 Notizen, 0 Papierkorb
 		if(localStorage.getItem('notes')) notes = JSON.parse(localStorage.getItem('notes'));
-		if(localStorage.getItem('waste')) waste = JSON.parse(localStorage.getItem('waste'));
 		if(localStorage.getItem('mode')) mode = JSON.parse(localStorage.getItem('mode'));
 		else localStorage.setItem('mode',JSON.stringify(mode));
-		function saveNote(node){
-			let title = document.getElementById('notetitle'+node);
-			let body = document.getElementById('notebody'+node);
-			let button = document.getElementById('notebutton'+node);
+
+		function saveNote(note){
+			if (note == -1) note = '';
+			let title = document.getElementById('notetitle'+note);
+			let body = document.getElementById('notebody'+note);
+			let button = document.getElementById('notebutton'+note);
 			if (title.value != "" || body.value !== "" ){
 				if(notes) { // wegen multifunktionalität
-					if(node == "") notes.unshift([title.value,body.value]); // wenn neue Notiz
-					else notes[node] = [title.value,body.value];            // wenn geändert
+					console.log("#"+note+"#");
+					if(note == '') notes.unshift([title.value,body.value,1]); // wenn neue Notiz
+					else notes[note] = [title.value,body.value,1];            // wenn geändert
 				}
 				title.value = "";
 				body.value = "";
+				closeDialog(); // wegen multifunktionalität
 				updateStorage();
 				showNotes();
 			}
 		}
-		function editNote(node){
-			let note = document.getElementById('note'+node).innerHTML;
+		function editNote(note){
+			//let node = document.getElementById('note'+note).innerHTML;
 			let editnote = document.getElementById('editdiv');
-			if (mode == 'notes') editnote.innerHTML = `
+			if (mode == 1) editnote.innerHTML = `
 				<div class="notes edit">
-					${note}
-					<img src="del.svg" class="img-actions" onclick="deleteNote(${node})"><img src="save.svg" class="img-actions"><img src="cancel.svg" class="img-actions">
+					<input type="text" id="notetitle${note}" value="${notes[note][0]}">
+					<textarea id="notebody${note}" rows="5">${notes[note][1]}</textarea>
+					<div><img src="del.svg" class="img-actions" onclick="deleteNote(${note})"><img src="save.svg" class="img-actions"  onclick="saveNote(${note})"><img src="cancel.svg" class="img-actions"  onclick="closeDialog()">
+					</div>
 				</div>`;
 			else editnote.innerHTML = `
 				<div class="notes edit">
-					${note}
-					<img src="undo.svg" class="img-actions" onclick="undoNote(${node})"><img src="cancel.svg" class="img-actions">
+					<div class="notetitle">${notes[note][0]}</div>
+					<div class="notebody"><pre>${notes[note][1]}</pre></div>
+					<img src="undo.svg" class="img-actions" onclick="undoNote(${note})"><img src="cancel.svg" class="img-actions"   onclick="closeDialog()">
 				</div>`;
 			editnote.classList.remove('hidden');
 		}
-		function undoNote(node){
-			console.log("undo " + node);
-		}
-		function deleteNote(node){
-			waste.unshift(notes[node]);
-			notes.splice(node,1);
+		function undoNote(note){
+			notes[note][2] = 1;
 			updateStorage();
 			showNotes();
+			closeDialog(); // wegen multifunktionalität
+			//
+		}
+		function deleteNote(note){
+			notes[note][2] = 0;
+			updateStorage();
+			showNotes();
+			closeDialog(); // wegen multifunktionalität
 		}
 		function showNotes(){
 			let notesdiv = document.getElementById('notes');
 			notesdiv.innerHTML = "";
 			if (notes.length != 0){
 				for (let i = 0; i < notes.length; i++){
+					if(notes[i][2] == mode )
 					notesdiv.innerHTML += `
-						<div class="notes" onclick="editNote(${i})" id="note${i}">
+						<div class="notes" onclick="editNote(${i})">
 						<div class="notetitle">${notes[i][0]}</div>
 						<div class="notebody"><pre>${notes[i][1]}</pre></div>
 						</div>
@@ -130,7 +145,6 @@
 		}
 		function updateStorage(){
 			localStorage.setItem('notes',JSON.stringify(notes));
-			localStorage.setItem('waste',JSON.stringify(waste));
 			localStorage.setItem('mode',JSON.stringify(mode));
 		}
 		function setMode(newmode){
@@ -144,12 +158,12 @@
 </head>
 
 <body onload="showNotes()">
-	<div id="editdiv" class="hidden" onclick="closeDialog()"></div>
-	<div><img class="img-active" src="notes.svg" id="mode-notes"><img class="img-over" src="waste.svg" id="mode-waste" onclick="setMode('waste')"></div>
+	<div id="editdiv" class="hidden"></div>
+	<div><img class="img-active" src="notes.svg" id="mode-notes"><img class="img-over" src="waste.svg" id="mode-waste" onclick="setMode(0)"></div>
 	<div id="inputdiv">
 		<input type="text" id="notetitle" placeholder="Titel">
 		<textarea id="notebody" placeholder="Text" rows="5"></textarea>
-		<button id="notebutton" onclick="saveNote('')">speichern</button>
+		<button id="notebutton" onclick="saveNote(-1)">speichern</button>
 	</div>
 	<div id="notes">
 	</div>
